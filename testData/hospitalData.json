@@ -1,0 +1,70 @@
+
+{
+  "patients": [
+    {
+      "name": "Mehul Sharma",
+      "dateofBirth":"1992-04-16",
+      "gender": "MALE",
+      "phone": "9876543210",
+      "enabled":true
+      
+    },
+    {
+      "name": "Priya Sharma",
+      "dateofBirth":"1995-11-20",
+      "gender": "FEMALE",
+      "phone": "9876543211",
+      "enabled" :false
+      
+    },
+    {
+      "name": "Amit Kumar",
+      "dateofBirth":"2000-09-24",
+      "gender": "MALE",
+      "phone": "9876543212",
+      "enabled" :false
+     
+    }
+  ],
+
+  "appointment": {
+    "name": "APX-010431 — Mehul Sharma Patient · 9876543210",
+    "department": "General Medicine",
+    "doctor": "Dr. Rajesh Sharma",
+    "date": "2026-10-29",
+    "time": "10:00",
+    "reason":"fever"
+  },
+
+  "opd": {
+
+    "name": "APX-010429 ",
+    "department": "General Medicine",
+    "doctor": "Dr. Rajesh Sharma",
+    "complaint": "Fever"
+  },
+
+  "ipd": {
+    "value":"197",
+    "ward": "6",
+    "department": "General Medicine",
+    "bed": "612",
+    "diagnosis": "Observation",
+    "summary":"patient is stable",
+    "discharge":"DISCHARGE"
+  },
+
+  "emergency":{
+
+    "patient":"Isha Shaikh ",
+    "triage_level":"GREEN",
+    "chief_complaint":"chest pain"
+
+  },
+  "laboratory":{
+
+    "patient":"APX-010272 - Aisha Iyer (Semi-Private)",
+    "clinical_notes":"Routine"
+
+  }
+}
