@@ -1,17 +1,12 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'Node'
-    }
-
     parameters {
         string(
             name: 'BASE_URL',
             defaultValue: 'https://aim-hms-demo.web.app/login',
             description: 'Hospital application URL'
         )
-
         string(
             name: 'USERNAME',
             defaultValue: 'MS',
@@ -21,6 +16,7 @@ pipeline {
 
     environment {
         PASSWORD = credentials('ms@123')
+        CI = 'true'
     }
 
     stages {
@@ -31,36 +27,38 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests and Publish Report') {
             steps {
                 script {
-                    def status = bat(
+                    int status = bat(
                         script: 'npx playwright test',
                         returnStatus: true
                     )
 
                     if (status != 0) {
-                        echo 'Tests failed. Continuing to publish reports.'
                         currentBuild.result = 'FAILURE'
+                        echo 'Playwright tests failed.'
                     }
                 }
             }
-        }
-    }
 
-    post {
-        always {
-            script {
-                echo 'Generating HTML reports...'
-
-                publishHTML(target: [
-                    reportDir: 'playwright-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Playwright HTML Report',
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    allowMissing: true
-                ])
+            post {
+                always {
+                    script {
+                        if (fileExists('playwright-report/index.html')) {
+                            publishHTML(target: [
+                                reportName: 'Playwright HTML Report',
+                                reportDir: 'playwright-report',
+                                reportFiles: 'index.html',
+                                keepAll: true,
+                                alwaysLinkToLastBuild: true,
+                                allowMissing: true
+                            ])
+                        } else {
+                            echo 'No Playwright HTML report was found.'
+                        }
+                    }
+                }
             }
         }
     }
