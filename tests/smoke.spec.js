@@ -29,6 +29,7 @@ test("opd visit", async ({ opdPage }) => {
 
 test.afterEach("logout", async ({ logoutPage }) => {
     await logoutPage.logout();
+    console.log("logged out")
 });
 
 
