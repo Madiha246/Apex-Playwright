@@ -58,7 +58,9 @@
 
     "patient":"Isha Shaikh ",
     "triage_level":"GREEN",
-    "chief_complaint":"chest pain"
+    "chief_complaint":"chest pain",
+    "emergency_created":"ER-1025",
+    "emergency_created_system":"ER-1038"
 
   },
   "laboratory":{
