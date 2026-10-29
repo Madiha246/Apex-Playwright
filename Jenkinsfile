@@ -1,12 +1,17 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'Node'
+    }
+
     parameters {
         string(
             name: 'BASE_URL',
             defaultValue: 'https://aim-hms-demo.web.app/login',
             description: 'Hospital application URL'
         )
+
 
         string(
             name: 'USERNAME',
@@ -30,7 +35,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    def status = bat(script: 'npx playwright test"', returnStatus: true)
+                    def status = bat(script: 'npx playwright test', returnStatus: true)
                     if (status != 0) {
                         echo "Tests failed, but continuing to generate reports..."
                     }
@@ -50,7 +55,6 @@ pipeline {
                 reportName: 'Playwright HTML Report',
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                 alwaysLinkToLastBuild: true,
                 allowMissing: true,
                 linkRelative: false
             ])
