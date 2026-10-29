@@ -1,9 +1,21 @@
 pipeline {
     agent any
 
-      environment {
-        BASE_URL = 'https://aim-hms-demo.web.app/login'
-        USERNAME = 'MS'
+    parameters {
+        string(
+            name: 'BASE_URL',
+            defaultValue: 'https://aim-hms-demo.web.app/login',
+            description: 'Hospital application URL'
+        )
+
+        string(
+            name: 'USERNAME',
+            defaultValue: 'MS',
+            description: 'Test username'
+        )
+    }
+
+    environment {
         PASSWORD = credentials('ms@123')
     }
 
