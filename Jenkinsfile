@@ -9,13 +9,13 @@ pipeline {
         )
         string(
             name: 'USERNAME',
-            defaultValue: 'MS',
+            defaultValue: 'ms',
             description: 'Test username'
         )
     }
 
     environment {
-        PASSWORD = credentials('ms@123')
+        PASSWORD = credentials('PASSWORD')
         CI = 'true'
     }
 
