@@ -4,7 +4,7 @@ test("HomePage", async ({homePage }) => {
     await expect(homePage.active).toBeVisible();
 });
 
-test.only("Dashboard", async ({ homePage, dashboardPage }) => {
+test("Dashboard", async ({ homePage, dashboardPage }) => {
     await homePage.dashboardButton.click();
 
     await expect(dashboardPage.dashboardtextheading).toBeVisible();
