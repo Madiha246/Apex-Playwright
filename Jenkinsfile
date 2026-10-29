@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+      environment {
+        BASE_URL = 'https://aim-hms-demo.web.app/login'
+        USERNAME = 'MS'
+        PASSWORD = credentials('ms@123')
+    }
+
     stages {
         stage('Install Dependencies') {
             steps {
