@@ -29,126 +29,63 @@ pipeline {
             }
         }
 
-        stage('Run Shards in Parallel') {
-            parallel {
-                stage('Shard 1') {
-                    steps {
-                        dir('shard-1') {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-
-                            script {
-                                def result = bat(
-                                    script: 'npx playwright test --shard=1/3 --reporter=blob',
-                                    returnStatus: true
-                                )
-
-                                stash(
-                                    name: 'blob-shard-1',
-                                    includes: 'blob-report/**',
-                                    allowEmpty: true
-                                )
-
-                                if (result != 0) {
-                                    unstable('Shard 1 failed')
-                                }
-                            }
-                        }
-                    }
-                }
-
-                stage('Shard 2') {
-                    steps {
-                        dir('shard-2') {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-
-                            script {
-                                def result = bat(
-                                    script: 'npx playwright test --shard=2/3 --reporter=blob',
-                                    returnStatus: true
-                                )
-
-                                stash(
-                                    name: 'blob-shard-2',
-                                    includes: 'blob-report/**',
-                                    allowEmpty: true
-                                )
-
-                                if (result != 0) {
-                                    unstable('Shard 2 failed')
-                                }
-                            }
-                        }
-                    }
-                }
-
-                stage('Shard 3') {
-                    steps {
-                        dir('shard-3') {
-                            checkout scm
-                            bat 'npm ci'
-                            bat 'npx playwright install chromium'
-
-                            script {
-                                def result = bat(
-                                    script: 'npx playwright test --shard=3/3 --reporter=blob',
-                                    returnStatus: true
-                                )
-
-                                stash(
-                                    name: 'blob-shard-3',
-                                    includes: 'blob-report/**',
-                                    allowEmpty: true
-                                )
-
-                                if (result != 0) {
-                                    unstable('Shard 3 failed')
-                                }
-                            }
-                        }
-                    }
+       stage('Run Shards in Parallel') {
+    parallel {
+        stage('Shard 1') {
+            steps {
+                withEnv(['SHARD_ID=1']) {
+                    bat 'npx playwright test --shard=1/3'
+                    stash name: 'shard1', includes: 'blob-report-1/**'
                 }
             }
         }
 
-        stage('Merge and Publish Report') {
+        stage('Shard 2') {
             steps {
-                bat 'if not exist all-blob-reports mkdir all-blob-reports'
-
-                dir('all-blob-reports') {
-                    unstash 'blob-shard-1'
-                    unstash 'blob-shard-2'
-                    unstash 'blob-shard-3'
+                withEnv(['SHARD_ID=2']) {
+                    bat 'npx playwright test --shard=2/3'
+                    stash name: 'shard2', includes: 'blob-report-2/**'
                 }
-
-                bat 'npx playwright merge-reports --reporter html all-blob-reports/blob-report'
             }
+        }
 
-            post {
-                always {
-                    script {
-                        if (fileExists('playwright-report/index.html')) {
-                            publishHTML(target: [
-                                reportDir: 'playwright-report',
-                                reportFiles: 'index.html',
-                                reportName: 'Playwright Sharded HTML Report',
-                                alwaysLinkToLastBuild: true,
-                                keepAll: true,
-                                allowMissing: true
-                            ])
-                        }
-                    }
+        stage('Shard 3') {
+            steps {
+                withEnv(['SHARD_ID=3']) {
+                    bat 'npx playwright test --shard=3/3'
+                    stash name: 'shard3', includes: 'blob-report-3/**'
                 }
             }
         }
     }
+}
+
+stage('Merge and Publish Report') {
+    steps {
+        bat 'mkdir all-blob-reports'
+        bat 'mkdir all-blob-reports\\blob-report'
+
+        unstash 'shard1'
+        unstash 'shard2'
+        unstash 'shard3'
+
+        bat 'copy /Y blob-report-1\\*.zip all-blob-reports\\blob-report\\'
+        bat 'copy /Y blob-report-2\\*.zip all-blob-reports\\blob-report\\'
+        bat 'copy /Y blob-report-3\\*.zip all-blob-reports\\blob-report\\'
+
+        bat 'npx playwright merge-reports --reporter html all-blob-reports/blob-report'
+    }
 
     post {
         always {
-            echo 'Playwright sharded execution completed.'
+            publishHTML(target: [
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright HTML Report',
+                keepAll: true,
+                alwaysLinkToLastBuild: true,
+                allowMissing: true
+            ])
         }
     }
 }
