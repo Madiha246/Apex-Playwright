@@ -12,6 +12,9 @@ dotenv.config({ path: path.resolve(__dirname, `.env.${process.env.TEST_ENV || "q
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
+// Define shardId
+const shardId = process.env.SHARD_ID || 'local';
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
