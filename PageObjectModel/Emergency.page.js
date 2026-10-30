@@ -62,7 +62,7 @@ class EmergencyPage{
     
     constructor(page){
         this.page=page
-        this.emergencyLink=page.locator("//span[text()='Emergency']")
+        this.emergencyLink=page.getByRole('link', { name: 'Emergency' })
         this.triageButton=page.getByRole("button",{name:"🚨 New Triage"})
         this.emergencyPatient=page.locator("//input[@class='input']")
         this.triageLevelDropdwn=page.locator("//select[@name='triage_level']")
@@ -76,6 +76,7 @@ class EmergencyPage{
     async emergencyVisit(){
         await this.emergencyLink.waitFor({ state: "visible" });
         await this.emergencyLink.click()
+           await this.emergencyLink.click()
         await this.triageButton.click()
     //      await this.emergencyPatient.waitFor({ state: "visible" });
     //        await this.page.getByText(data.emergency.patient, { exact: true }).waitFor({

@@ -3,7 +3,7 @@ import data from "../testData/hospitalData.json"
 class LaboratoryPage{
     constructor(page){
         this.page=page
-        this.lablink=page.locator("//span[text()='Laboratory']")
+        this.lablink=page.getByRole('link', { name: 'Laboratory' })
         this.newOrderBtn=page.getByRole("button",{name:"+ New Order"})
         this.selectpatientDD=page.locator("#lab-patient")
         this.clinicalNotes=page.locator("#lab-notes")

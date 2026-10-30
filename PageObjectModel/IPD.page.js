@@ -12,7 +12,7 @@ class IPDPage{
         this.diagnosis=page.locator("#ipd-diagnosis")
         this.submitButton=page.getByRole("button",{name:"Submit Admission"})
 
-        this.semi_private=page.locator("//div[@title='SPV-02 · Arjun Chopra — click for details / discharge']")
+        this.semi_private=page.locator("//div[contains(@title,'SPV-02')]")
         this.dischargeButton=page.locator("//button[@class='btn btn-primary' and contains(text(),'Discharge')]")
         this.dischargeSummary=page.getByPlaceholder("Condition at discharge, follow-up advice, medications, notes…")
         this.waveofCheckbox=page.locator("//input[@type='checkbox']")

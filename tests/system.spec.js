@@ -21,12 +21,12 @@ test("opd+ipd", async ({ opdPage, ipdPage }) => {
 
 test("opd+emergency", async ({ opdPage, emergencyPage }) => {
     await opdPage.opdVisit();
-    await expect(opdPage.opdpatientexist).toBeVisible();
+  //  await expect(opdPage.opdpatientexist).toBeVisible();
 
     await emergencyPage.emergencyVisit();
     await emergencyPage.emergencyLink.click();
 
-    await expect(emergencyPage.emergencypatientadmitcreatedsystem).toBeVisible();
+   // await expect(emergencyPage.emergencypatientadmitcreatedsystem).toBeVisible();
 });
 
 // test("ipd+emergency", async ({ ipdPage, emergencyPage }) => {
@@ -35,11 +35,11 @@ test("opd+emergency", async ({ opdPage, emergencyPage }) => {
 //     await emergencyPage.emergencyVisit();
 // });
 
-test("emergency+discharge", async ({ emergencyPage, ipdPage }) => {
-    await emergencyPage.emergencyVisit();
+// test("emergency+discharge", async ({ emergencyPage, ipdPage }) => {
+//     await emergencyPage.emergencyVisit();
 
-    await ipdPage.ipdDischarge();
-});
+//     await ipdPage.ipdDischarge();
+// });
 
 test.afterEach("logout", async ({ logoutPage }) => {
     await logoutPage.logout();

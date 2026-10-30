@@ -39,7 +39,7 @@ export default defineConfig({
     : [
         ['html', {
           outputFolder: 'playwright-report',
-          open: 'never'
+          open: 'on-failure'
         }]
       ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -55,7 +55,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
 
     // Capture video when test fails
-    video: 'on',
+    video: "retain-on-failure"
 
   },
 

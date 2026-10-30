@@ -8,7 +8,7 @@ class Login{
     }
     async login(){
         await this.page.goto(process.env.BASE_URL)
-        await this.username.fill(process.env.USERNAME)
+        await this.username.fill(process.env.TEST_USERNAME)
         await this.password.fill(process.env.PASSWORD)
         await this.signinbutton.click() 
     }
