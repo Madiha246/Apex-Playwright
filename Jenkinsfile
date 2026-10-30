@@ -67,17 +67,14 @@ pipeline {
                 bat 'if exist playwright-report rmdir /s /q playwright-report'
 
                 bat 'mkdir all-blob-reports'
-                bat 'mkdir all-blob-reports\\blob-report'
 
+                // Unstash all shard reports into distinct folders
                 unstash 'shard1'
                 unstash 'shard2'
                 unstash 'shard3'
 
-                bat 'copy /Y blob-report-1\\*.zip all-blob-reports\\blob-report\\'
-                bat 'copy /Y blob-report-2\\*.zip all-blob-reports\\blob-report\\'
-                bat 'copy /Y blob-report-3\\*.zip all-blob-reports\\blob-report\\'
-
-                bat 'npx playwright merge-reports --reporter html all-blob-reports/blob-report'
+                // Playwright merge-reports can point directly to a directory containing the blob reports
+                bat 'npx playwright merge-reports --reporter html blob-report-1 blob-report-2 blob-report-3'
             }
 
             post {
@@ -100,10 +97,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            echo 'Playwright sharded execution completed.'
-        }
-    }
-}
+}        
